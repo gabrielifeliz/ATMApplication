@@ -8,46 +8,62 @@ public class ATM {
 
         Scanner keyboard = new Scanner(System.in);
         String accNum, pin, answer;
-        int accNumOrPINTries = 1;
 
         System.out.println("Enter account number:");
         accNum = keyboard.nextLine();
 
         Account account = new Account();
 
-        while (!account.verifyAccountNumber(accNum)) {
-            accNumOrPINTries++;
-            System.out.println("Enter account number again:");
-            accNum = keyboard.nextLine();
+        accNum = accountNumberValidation(keyboard, accNum, account);
 
-            if (accNumOrPINTries == 3 && !account.verifyAccountNumber(accNum)) {
-                System.out.println("\nFailed to enter valid account number\nTry again...");
-                System.exit(0);
-            }
-        }
-
-        accNumOrPINTries = 1;
         System.out.println("Enter PIN:");
         pin = keyboard.nextLine();
 
-        while (!account.verifyPIN(accNum, pin)) {
-            accNumOrPINTries++;
-            System.out.println("Enter PIN again:");
-            pin = keyboard.nextLine();
-            if (accNumOrPINTries == 3 && !account.verifyPIN(accNum, pin)) {
-                System.out.println("\nFailed to enter valid PIN\nTry again...");
-                System.exit(0);
-            }
-        }
+        pinVerification(keyboard, accNum, pin, account);
 
         account.setUserName();
         account.setBalance();
 
         System.out.println("\nWelcome, " + account.getUserName()
                 + "!\nWhat would you like to do today with your current balance?"
-                + "\n(\"deposit\", \"withdraw\", or \"check\")");
+                + "\n(\"deposit\", \"withdraw\", \"check\" or \"exit\")");
         answer = keyboard.nextLine();
 
+        atmActions(keyboard, answer, account);
+
+        System.out.println("\n\nThank you for using this ATM. Good-bye!");
+        keyboard.close();
+    }
+
+    private static void pinVerification(Scanner keyboard, String accNum, String pin, Account account) {
+        while (!account.verifyPIN(accNum, pin)) {
+            int numOfAttempts = 1;
+            numOfAttempts++;
+            System.out.println("Enter PIN again:");
+            pin = keyboard.nextLine();
+            if (numOfAttempts == 3 && !account.verifyPIN(accNum, pin)) {
+                System.out.println("\nFailed to enter valid PIN\nTry again...");
+                System.exit(0);
+            }
+        }
+    }
+
+    private static String accountNumberValidation(Scanner keyboard, String accNum, Account account) {
+        while (!account.verifyAccountNumber(accNum)) {
+            int numOfAttempts = 1;
+            numOfAttempts++;
+            System.out.println("Enter account number again:");
+            accNum = keyboard.nextLine();
+
+            if (numOfAttempts == 3 && !account.verifyAccountNumber(accNum)) {
+                System.out.println("\nFailed to enter valid account number\nTry again...");
+                System.exit(0);
+            }
+        }
+        return accNum;
+    }
+
+    private static void atmActions(Scanner keyboard, String answer, Account account) {
         while (!answer.equalsIgnoreCase("exit")) {
             switch (answer) {
                 case "deposit":
@@ -71,9 +87,5 @@ public class ATM {
                     break;
             }
         }
-
-        System.out.println("\n\nThank you for using this ATM. Good-bye!");
-        // "5555555555554444", "2371"
-        keyboard.close();
     }
 }
