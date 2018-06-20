@@ -40,23 +40,40 @@ public class ATM {
             }
         }
 
-        System.out.println("What would you like to do today with your current balance?" +
-                "\n(\"deposit\", \"withdraw\", or \"check\")");
+        account.setUserName();
+        account.setBalance();
+
+        System.out.println("\nWelcome, " + account.getUserName()
+                + "!\nWhat would you like to do today with your current balance?"
+                + "\n(\"deposit\", \"withdraw\", or \"check\")");
         answer = keyboard.nextLine();
 
         while (!answer.equalsIgnoreCase("exit")) {
             switch (answer) {
                 case "deposit":
+                    System.out.println("How much do you want to deposit? ");
+                    answer = keyboard.nextLine();
+                    System.out.println(account.deposit(Double.parseDouble(answer)));
+                    System.out.println("What else would you like to do?");
+                    answer = keyboard.nextLine();
                     break;
                 case "withdraw":
+                    System.out.println("How much do you want to withdraw? ");
+                    answer = keyboard.nextLine();
+                    System.out.println(account.withdraw(Double.parseDouble(answer)));
+                    System.out.println("What else would you like to do?");
+                    answer = keyboard.nextLine();
                     break;
                 case "check":
+                    System.out.println(account.checkBalance());
+                    System.out.println("What else would you like to do?");
+                    answer = keyboard.nextLine();
                     break;
             }
         }
 
-        System.out.println("Thank you for using this ATM. Good-bye!");
-        // "6011111111111117", "1345"
+        System.out.println("\n\nThank you for using this ATM. Good-bye!");
+        // "5555555555554444", "2371"
         keyboard.close();
     }
 }
